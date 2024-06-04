@@ -385,40 +385,156 @@ public class TileManagerView extends JFrame {
 		String strThickness = inputThickness.getText();
 		//Check name
 		if(strName == null || strName.trim().equals("")) {
+			JOptionPane.showConfirmDialog(this, "Trường tên sản phẩm không được để trống!", "Lỗi",
+					JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
 			return false;
 		}
 		//Check price
 		if(strPrice == null || strPrice.trim().equals("")) {
+			JOptionPane.showConfirmDialog(this, "Trường giá sản phẩm không được để trống!", "Lỗi",
+					JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
 			return false;
+		} else {
+			String err = "Trường giá sản phẩm phải là số thực ≥ 0!";
+			try {
+				double price = Double.parseDouble(strPrice);
+				if(price < 0) {
+					JOptionPane.showConfirmDialog(this, err, "Lỗi",
+							JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
+					return false;
+				}
+			} catch (Exception e) {
+				JOptionPane.showConfirmDialog(this, err, "Lỗi",
+						JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
+				return false;
+			}
 		}
 		//Check quantity
 		if(strQuantity == null || strQuantity.trim().equals("")) {
+			JOptionPane.showConfirmDialog(this, "Trường số lượng sản phẩm không được để trống!", "Lỗi",
+					JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
 			return false;
+		} else {
+			String err = "Trường số lượng sản phẩm phải là số nguyên ≥ 0!";
+			try {
+				int quantity = Integer.parseInt(strQuantity);
+				if(quantity < 0) {
+					JOptionPane.showConfirmDialog(this, err, "Lỗi",
+							JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
+					return false;
+				}
+			} catch (Exception e) {
+				JOptionPane.showConfirmDialog(this, err, "Lỗi",
+						JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
+				return false;
+			}
 		}
 		//Check length
 		if(strLength == null || strLength.trim().equals("")) {
+			JOptionPane.showConfirmDialog(this, "Trường độ dài gạch ốp lát không được để trống!", "Lỗi",
+					JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
 			return false;
+		} else {
+			String err = "Trường độ dài gạch ốp lát phải là số thực > 0!";
+			try {
+				double a = Double.parseDouble(strLength);
+				if(a <= 0) {
+					JOptionPane.showConfirmDialog(this, err, "Lỗi",
+							JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
+					return false;
+				}
+			} catch (Exception e) {
+				JOptionPane.showConfirmDialog(this, err, "Lỗi",
+						JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
+				return false;
+			}
 		}
 		//Check width
 		if(strWidth == null || strWidth.trim().equals("")) {
+			JOptionPane.showConfirmDialog(this, "Trường độ rộng gạch ốp lát không được để trống!", "Lỗi",
+					JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
 			return false;
+		} else {
+			String err = "Trường độ rộng gạch ốp lát phải là số thực > 0!";
+			try {
+				double a = Double.parseDouble(strWidth);
+				if(a <= 0) {
+					JOptionPane.showConfirmDialog(this, err, "Lỗi",
+							JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
+					return false;
+				}
+			} catch (Exception e) {
+				JOptionPane.showConfirmDialog(this, err, "Lỗi",
+						JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
+				return false;
+			}
 		}
 		//Check thickness
 		if(strThickness == null || strThickness.trim().equals("")) {
+			JOptionPane.showConfirmDialog(this, "Trường độ dày gạch ốp lát không được để trống!", "Lỗi",
+					JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
 			return false;
+		} else {
+			String err = "Trường độ dày gạch ốp lát phải là số thực > 0!";
+			try {
+				double a = Double.parseDouble(strThickness);
+				if(a <= 0) {
+					JOptionPane.showConfirmDialog(this, err, "Lỗi",
+							JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
+					return false;
+				}
+			} catch (Exception e) {
+				JOptionPane.showConfirmDialog(this, err, "Lỗi",
+						JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
+				return false;
+			}
 		}
 		return true;
 	}
 	
 	private void handleCreate() {
 		if(checkValid()) {
-			
+			Tile item = new Tile();
+			item.setProduct_name(inputName.getText().trim());
+			item.setProduct_price(Double.parseDouble(inputPrice.getText()));
+			item.setProduct_total(Integer.parseInt(inputQuantity.getText()));
+			item.setTile_length(Double.parseDouble(inputLength.getText()));
+			item.setTile_width(Double.parseDouble(inputWidth.getText()));
+			item.setTile_thickness(Double.parseDouble(inputThickness.getText()));
+			item.setTile_material((String) comboBox.getSelectedItem());
+			if(tileManager.addTile(item)) {
+				JOptionPane.showConfirmDialog(this, "Thêm mới sản phẩm thành công!", "Thành công",
+						JOptionPane.CLOSED_OPTION, JOptionPane.INFORMATION_MESSAGE);
+				loadModel();
+				handleReset();
+			} else JOptionPane.showConfirmDialog(this, "Thêm mới sản phẩm không thành công!", "Lỗi",
+					JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
 		}
 	}
 	
 	private void handleUpdate() {
+		if(inputId.getText() == null || inputId.getText().trim().equals("")) return;
 		if(checkValid()) {
-			
+			int check = JOptionPane.showConfirmDialog(this, "Bạn có chắc chắn cập nhật thông tin sản phẩm!", "Chấp nhận",
+					JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+			if(check == JOptionPane.YES_OPTION) {
+				Tile item = new Tile();
+				item.setProduct_id(Integer.parseInt(inputId.getText()));
+				item.setProduct_name(inputName.getText().trim());
+				item.setProduct_price(Double.parseDouble(inputPrice.getText()));
+				item.setProduct_total(Integer.parseInt(inputQuantity.getText()));
+				item.setTile_length(Double.parseDouble(inputLength.getText()));
+				item.setTile_width(Double.parseDouble(inputWidth.getText()));
+				item.setTile_thickness(Double.parseDouble(inputThickness.getText()));
+				item.setTile_material((String) comboBox.getSelectedItem());
+				if(tileManager.editTile(item)) {
+					JOptionPane.showConfirmDialog(this, "Cập nhật thông tin sản phẩm thành công!", "Thành công",
+							JOptionPane.CLOSED_OPTION, JOptionPane.INFORMATION_MESSAGE);
+					loadModel();
+					handleReset();
+				} else JOptionPane.showConfirmDialog(this, "Cập nhật thông tin sản phẩm không thành công!", "Lỗi",
+						JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
+			}
 		}
 	}
 
