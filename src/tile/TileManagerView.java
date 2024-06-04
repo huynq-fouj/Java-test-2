@@ -343,7 +343,7 @@ public class TileManagerView extends JFrame {
 	}
 	
 	public void loadModel() {
-		table.setModel(new TileTableModel(tileManager.getList()));
+		table.setModel(new TileTableModel(tileManager.sortedTile(TileSortType.ID, false)));
 	}
 	
 	public void loadModelV2() {
@@ -364,7 +364,9 @@ public class TileManagerView extends JFrame {
 		int row = table.getSelectedRow();
 		if(row != -1) {
 			int id = (int) table.getValueAt(row, 0);
-			Tile item = tileManager.getList().stream().filter(i -> i.getProduct_id() == id).findFirst().get();
+			Tile item = tileManager.sortedTile(TileSortType.ID, false)
+				.stream().filter(i -> i.getProduct_id() == id)
+					.findFirst().get();
 			inputId.setText(item.getProduct_id() + "");
 			inputName.setText(item.getProduct_name());
 			inputPrice.setText(item.getProduct_price() + "");
@@ -542,7 +544,9 @@ public class TileManagerView extends JFrame {
 		int row = table.getSelectedRow();
 		if(row != -1) {
 			int id = (int) table.getValueAt(row, 0);
-			Tile item = tileManager.getList().stream().filter(i -> i.getProduct_id() == id).findFirst().get();
+			Tile item = tileManager.sortedTile(TileSortType.ID, false)
+				.stream().filter(i -> i.getProduct_id() == id)
+					.findFirst().get();
 			if(item != null) {
 				int check = JOptionPane.showConfirmDialog(this,
 						"Bạn có chắc chắn muốn xóa sản phẩm: " + item.getProduct_name(),

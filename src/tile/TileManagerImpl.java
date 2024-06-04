@@ -16,7 +16,7 @@ public class TileManagerImpl implements TileManager, Serializable {
 	
 	private static final long serialVersionUID = 1L;
 	private List<Tile> items;
-	private static final String FILE_NAME = "data.txt";
+	private static final String FILE_NAME = "Tile.bin";
 
 	public TileManagerImpl() {
 		items = new ArrayList<>();
@@ -70,22 +70,15 @@ public class TileManagerImpl implements TileManager, Serializable {
 		 * `Collectors.toList() là một collector được cung cấp bởi Java Stream API, dùng để chuyển đổi luồng thành một danh sách.
 		 */
 		return items.stream()
-                .filter(tile -> tile.getProduct_name().contains(name))
-                .collect(Collectors.toList());
-	}
-	
-	@Override
-	public List<Tile> searchTileByPrice(double price) {
-		return items.stream()
-                .filter(tile -> tile.getProduct_price() <= price)
-                .collect(Collectors.toList());
-	}
-
-	@Override
-	public List<Tile> searchTileByMaterial(String material) {
-		return items.stream()
-                .filter(tile -> tile.getTile_material().contains(material))
-                .collect(Collectors.toList());
+                .filter(tile -> {
+					double price = 0.0;
+					try {
+						price = Double.parseDouble(name);
+					} catch (Exception e) {}
+					return tile.getProduct_name().contains(name)
+						|| tile.getTile_material().contains(name)
+						|| tile.getProduct_price() == price;
+				}).collect(Collectors.toList());
 	}
 
 	@Override
@@ -166,16 +159,6 @@ public class TileManagerImpl implements TileManager, Serializable {
     		items = new ArrayList<Tile>();
     		saveChange();
     	}
-	}
-
-	@Override
-	public void printInfo() {
-		Utilities.printTileList(items);
-	}
-
-	@Override
-	public List<Tile> getList() {
-		return items;
 	}
 
 }
