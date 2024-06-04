@@ -111,7 +111,7 @@ public class TileManagerView extends JFrame {
 		//Thêm sự kiện bàn phím: khi một phím bất kỳ được release
 		inputSearch.addKeyListener(new KeyAdapter() {
 			public void keyReleased(KeyEvent e) {
-				loadModelV2();
+				handleSearch();
 		    }
 		});
 		
@@ -346,10 +346,14 @@ public class TileManagerView extends JFrame {
 		table.setModel(new TileTableModel(tileManager.sortedTile(TileSortType.ID, false)));
 	}
 	
-	public void loadModelV2() {
+	public void loadModel(List<Tile> items) {
+		table.setModel(new TileTableModel(items));
+	}
+
+	private void handleSearch() {
 		String key = inputSearch.getText();
 		List<Tile> result = tileManager.searchTile(key);
-		table.setModel(new TileTableModel(result));
+		loadModel(result);
 	}
 	
 	public TileManager getTileManager() {
@@ -495,6 +499,11 @@ public class TileManagerView extends JFrame {
 	}
 	
 	private void handleCreate() {
+		if(inputId.getText() != null && !inputId.getText().trim().equals("")) {
+			JOptionPane.showConfirmDialog(this, "Không thể thêm mới sản phẩm khi đang trong chế độ chỉnh sửa!", "Lỗi",
+					JOptionPane.CLOSED_OPTION, JOptionPane.ERROR_MESSAGE);
+			return;
+		}
 		if(checkValid()) {
 			Tile item = new Tile();
 			item.setProduct_name(inputName.getText().trim());

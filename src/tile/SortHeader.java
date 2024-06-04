@@ -3,11 +3,12 @@ package tile;
 import java.awt.Point;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 public class SortHeader extends MouseAdapter {
 
 	private static boolean sorted = true;
-	//private static TileSortType sortType;
 	private TileManagerView frame;
 	
 	public SortHeader(TileManagerView frame) {
@@ -16,45 +17,37 @@ public class SortHeader extends MouseAdapter {
 	
 	@Override
 	public void mouseClicked(MouseEvent e) {
+		List<Tile> items = new ArrayList<>();
 		Point point = e.getPoint();
 		int col = frame.getTable().columnAtPoint(point);
 		switch(col) {
 			case 0:
-				frame.getTileManager().sortedTile(TileSortType.ID, sorted);
-				frame.loadModel();
-				sorted = !sorted;
+				items = frame.getTileManager().sortedTile(TileSortType.ID, sorted);
 				break;
 			case 1:
-				frame.getTileManager().sortedTile(TileSortType.NAME, sorted);
-				frame.loadModel();
-				sorted = !sorted;
+				items = frame.getTileManager().sortedTile(TileSortType.NAME, sorted);
 				break;
 			case 2:
-				frame.getTileManager().sortedTile(TileSortType.PRICE, sorted);
-				frame.loadModel();
-				sorted = !sorted;
+				items = frame.getTileManager().sortedTile(TileSortType.PRICE, sorted);
 				break;
 			case 3:
-				frame.getTileManager().sortedTile(TileSortType.TOTAL, sorted);
-				frame.loadModel();
-				sorted = !sorted;
+				items = frame.getTileManager().sortedTile(TileSortType.TOTAL, sorted);
 				break;
 			case 4:
-				frame.getTileManager().sortedTile(TileSortType.SIZE, sorted);
-				frame.loadModel();
-				sorted = !sorted;
+				items = frame.getTileManager().sortedTile(TileSortType.SIZE, sorted);
 				break;
 			case 5:
-				frame.getTileManager().sortedTile(TileSortType.THICKNESS, sorted);
-				frame.loadModel();
-				sorted = !sorted;
+				items = frame.getTileManager().sortedTile(TileSortType.THICKNESS, sorted);
 				break;
 			case 6:
-				frame.getTileManager().sortedTile(TileSortType.MATERIAL, sorted);
-				frame.loadModel();
-				sorted = !sorted;
+				items = frame.getTileManager().sortedTile(TileSortType.MATERIAL, sorted);
+				break;
+			default:
+				items = frame.getTileManager().sortedTile(TileSortType.ID, sorted);
 				break;
 		}
+		frame.loadModel(items);
+		sorted = !sorted;
 	}
 	
 }
